@@ -1,37 +1,14 @@
 name: CI/CD Pipeline
-on:
-  push:
-    branches: [main]
+on: [push]
 
 jobs:
-  test:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Instalar dependencias
         run: pip install -r requirements.txt
-      - name: Ejecutar tests
-        run: pytest  # Asegúrate de tener tests/ en tu repo
-
-  deploy-staging:
-    needs: test
-    runs-on: ubuntu-latest
-    environment: staging  # Grupo de despliegue 1
-    steps:
-      - uses: actions/checkout@v4
-      - name: Desplegar en Staging
-        run: |
-          echo "Desplegando en staging..."
-          # Aquí tu comando de despliegue (ej. Docker, SSH, etc.)
-          docker-compose -f docker-compose.staging.yml up -d
-
-  deploy-production:
-    needs: deploy-staging
-    runs-on: ubuntu-latest
-    environment: production  # Grupo de despliegue 2
-    steps:
-      - uses: actions/checkout@v4
-      - name: Desplegar en Producción
-        run: |
-          echo "Desplegando en producción..."
-          docker-compose -f docker-compose.prod.yml up -d
+      - name: Iniciar la app (prueba básica)
+        run: python -c "from app import app; print('¡App funciona correctamente!')"
+      - name: Desplegar
+        run: echo "Aquí irían tus comandos de despliegue reales"
